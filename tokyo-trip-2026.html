@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<meta name="supported-color-schemes" content="light">
+<meta name="theme-color" content="#ffffff">
+<title>Tokyo 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #ffffff;
+    --card: #ffffff;
+    --ink: #111111;
+    --text: #1f1f1f;
+    --muted: #8a8a8e;
+    --line: #ebebeb;
+    --line-strong: #d1d1d6;
+    --accent: #007aff;
+    --green: #34c759;
+    --orange: #ff9500;
+  }
+
+  /* 다크모드 강제 차단 */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: light !important;
+      --bg: #ffffff !important;
+      --card: #ffffff !important;
+      --ink: #111111 !important;
+      --text: #1f1f1f !important;
+      --muted: #8a8a8e !important;
+      --line: #ebebeb !important;
+      --line-strong: #d1d1d6 !important;
+    }
+    html, body {
+      background: #ffffff !important;
+      color: #1f1f1f !important;
+    }
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html {
+    scroll-behavior: smooth;
+    background: #ffffff !important;
+    color-scheme: light;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #1f1f1f;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", "Noto Sans KR", sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  /* ── COVER / HEADER ── */
+  .header {
+    background: var(--card);
+    padding: 4rem 1.5rem 2.5rem;
+  }
+
+  .header-inner {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .header-label {
+    font-size: 0.78rem;
+    color: var(--muted);
+    letter-spacing: 0.02em;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+
+  .header-title {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+    font-size: 2.75rem;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin-bottom: 0.5rem;
+  }
+
+  .header-sub {
+    font-size: 1rem;
+    color: var(--muted);
+    margin-bottom: 2rem;
+    font-weight: 400;
+  }
+
+  .header-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .meta-item .meta-label {
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.35rem;
+    font-weight: 500;
+  }
+
+  .meta-item .meta-value {
+    font-size: 0.95rem;
+    color: var(--text);
+    font-weight: 500;
+    line-height: 1.45;
+  }
+
+  .meta-item .meta-value + .meta-value {
+    margin-top: 0.1rem;
+  }
+
+  .meta-item .meta-sub {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 0.15rem;
+    font-weight: 400;
+  }
+
+  /* ── STICKY NAV ── */
+  .day-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    padding: 0.75rem 1rem;
+    display: flex;
+    gap: 0.4rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    justify-content: flex-start;
+  }
+  .day-nav::-webkit-scrollbar { display: none; }
+
+  .nav-btn {
+    flex-shrink: 0;
+    padding: 0.5rem 1rem;
+    background: var(--card);
+    border: 1px solid var(--line-strong);
+    color: var(--muted);
+    font-family: inherit;
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    border-radius: 999px;
+    letter-spacing: -0.01em;
+  }
+
+  .nav-btn:hover {
+    border-color: var(--text);
+    color: var(--text);
+  }
+
+  .nav-btn.active {
+    background: var(--ink);
+    color: white;
+    border-color: var(--ink);
+  }
+
+  /* ── DAY SECTION ── */
+  .day {
+    padding: 2rem 1.25rem 1.5rem;
+    max-width: 720px;
+    margin: 0 auto;
+    scroll-margin-top: 70px;
+  }
+
+  .day-header {
+    padding: 1rem 0.25rem 1.25rem;
+  }
+
+  .day-num-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .day-num {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+  }
+
+  .day-date {
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .day-title {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+    margin-bottom: 0.3rem;
+  }
+
+  .day-note {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.45;
+  }
+
+  /* ── STOP CARD ── */
+  .stop {
+    background: var(--card);
+    border: 1px solid #f0f0f0;
+    border-radius: 16px;
+    padding: 1rem 1.1rem;
+    margin-bottom: 0.85rem;
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    gap: 0.85rem;
+    align-items: flex-start;
+    transition: opacity 0.25s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.04);
+  }
+
+  .stop:hover {
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.09), 0 4px 10px rgba(0, 0, 0, 0.05);
+    transform: translateY(-1px);
+  }
+
+  .stop.done .stop-name,
+  .stop.done .stop-info {
+    text-decoration: line-through;
+    opacity: 0.35;
+  }
+
+  .stop.done {
+    background: #ffffff;
+  }
+
+  /* CHECKBOX (iOS style) */
+  .check {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    border: 1.5px solid var(--line-strong);
+    background: var(--card);
+    cursor: pointer;
+    position: relative;
+    margin-top: 1px;
+    flex-shrink: 0;
+    transition: all 0.18s ease;
+    border-radius: 50%;
+  }
+
+  .check:hover {
+    border-color: var(--muted);
+  }
+
+  .check:checked {
+    background: var(--green);
+    border-color: var(--green);
+  }
+
+  .check:checked::after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 2px;
+    width: 6px;
+    height: 11px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+
+  .stop-body {
+    min-width: 0;
+  }
+
+  .stop-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .stop-name {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+    font-weight: 600;
+    font-size: 0.98rem;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    line-height: 1.35;
+  }
+
+  .stop-icon {
+    margin-right: 0.25rem;
+  }
+
+  .stop-tag {
+    font-size: 0.72rem;
+    color: var(--muted);
+    white-space: nowrap;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+  }
+
+  .stop-info {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 0.3rem;
+    line-height: 1.4;
+  }
+
+  .badge {
+    display: inline-block;
+    background: #e8f5ed;
+    color: #1d7a3a;
+    padding: 0.15rem 0.5rem;
+    margin-right: 0.4rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    border-radius: 999px;
+  }
+
+  .badge.check-in,
+  .badge.check-out {
+    background: #eef2ff;
+    color: #3b4ad6;
+  }
+
+  .stop-links {
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 0.7rem;
+    flex-wrap: wrap;
+  }
+
+  .lnk {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.4rem 0.95rem;
+    font-family: inherit;
+    font-size: 0.78rem;
+    text-decoration: none;
+    border: 1px solid var(--line-strong);
+    color: var(--text);
+    background: var(--card);
+    transition: all 0.15s ease;
+    cursor: pointer;
+    border-radius: 999px;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+  }
+
+  .lnk:hover {
+    background: var(--ink);
+    color: white;
+    border-color: var(--ink);
+  }
+
+  /* TRANSPORT (text only) */
+  .transport {
+    padding: 0.4rem 1.1rem 0.4rem 35px;
+    margin-bottom: 0.25rem;
+  }
+
+  .transport-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.15s ease;
+    font-weight: 400;
+  }
+
+  .transport-link:hover {
+    color: var(--accent);
+  }
+
+  .transport-link .arrow {
+    transition: transform 0.15s ease;
+    font-size: 0.85rem;
+  }
+
+  .transport-link:hover .arrow {
+    transform: translateX(3px);
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 3rem 1.5rem 4rem;
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  footer .f-title {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+    font-weight: 700;
+    font-size: 1.6rem;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    margin-bottom: 0.4rem;
+  }
+
+  footer .f-meta {
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+
+  .progress {
+    margin-top: 1.5rem;
+    height: 6px;
+    background: var(--line);
+    overflow: hidden;
+    max-width: 240px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 999px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--green);
+    width: 0%;
+    transition: width 0.3s ease;
+    border-radius: 999px;
+  }
+
+  .progress-text {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: 0.7rem;
+    font-weight: 500;
+  }
+
+  @media (max-width: 600px) {
+    .header { padding: 3rem 1.25rem 2rem; }
+    .header-title { font-size: 2.25rem; }
+    .day { padding: 1.5rem 0.85rem 0.5rem; }
+    .stop-head { flex-direction: column; gap: 0.2rem; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header class="header">
+  <div class="header-inner">
+    <p class="header-label">Spring Trip</p>
+    <h1 class="header-title">Tokyo 2026</h1>
+    <p class="header-sub">4박 5일 · 5월 22일 — 26일</p>
+
+    <div class="header-meta">
+      <div class="meta-item">
+        <div class="meta-label">Duration</div>
+        <div class="meta-value">4 nights · 5 days</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Dates</div>
+        <div class="meta-value">May 22 — 26</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Arrival</div>
+        <div class="meta-value">11:20 a.m.</div>
+        <div class="meta-sub">NRT Terminal 2</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Stay</div>
+        <div class="meta-value">Imperial Hotel Tokyo</div>
+        <div class="meta-value">Riga Royal Hotel</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ── NAV ── -->
+<nav class="day-nav">
+  <button class="nav-btn" onclick="goTo('day1')">Day 1 · Fri</button>
+  <button class="nav-btn" onclick="goTo('day2')">Day 2 · Sat</button>
+  <button class="nav-btn" onclick="goTo('day3')">Day 3 · Sun</button>
+  <button class="nav-btn" onclick="goTo('day4')">Day 4 · Mon</button>
+  <button class="nav-btn" onclick="goTo('day5')">Day 5 · Tue</button>
+</nav>
+
+<!-- ── DAY 1 ── -->
+<section class="day" id="day1">
+  <div class="day-header">
+    <div class="day-num-row">
+      <div class="day-num">Day 1</div>
+      <div class="day-date">5월 22일 (금)</div>
+    </div>
+    <h2 class="day-title">도쿄 도착 · 긴자</h2>
+    <p class="day-note">11:20 도쿄 도착 · 긴자 & 니혼바시 일대</p>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d1-1">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">🍽️</span>하치다이메 기헤</div>
+        <div class="stop-tag">점심</div>
+      </div>
+      <div class="stop-info">八代目儀兵衛 · 긴자</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://maps.app.goo.gl/4x4q6j3WLfQQevSG6" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="transport">
+    <a class="transport-link" href="https://www.google.com/maps/dir/?api=1&origin=%E5%85%AB%E4%BB%A3%E7%9B%AE%E5%84%80%E5%85%B5%E8%A1%9B%E9%8A%80%E5%BA%A7&destination=Imperial+Hotel+Tokyo&travelmode=walking" target="_blank">↳ 도보 이동 <span class="arrow">→</span></a>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d1-checkin">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">🏨</span>Imperial Hotel Tokyo</div>
+        <div class="stop-tag">체크인</div>
+      </div>
+      <div class="stop-info"><span class="badge check-in">CHECK-IN</span>임페리얼 호텔</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://www.google.com/maps/search/?api=1&query=Imperial+Hotel+Tokyo" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="transport">
+    <a class="transport-link" href="https://www.google.com/maps/dir/?api=1&origin=Imperial+Hotel+Tokyo&destination=%E3%83%AA%E3%82%AB%E3%83%BC%E3%83%9E%E3%82%A6%E3%83%B3%E3%83%86%E3%83%B3777%E9%8A%80%E5%BA%A7&travelmode=walking" target="_blank">↳ 도보 이동 <span class="arrow">→</span></a>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d1-2">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">🛍️</span>리커마운틴 777</div>
+        <div class="stop-tag">쇼핑</div>
+      </div>
+      <div class="stop-info">주류 쇼핑</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://maps.app.goo.gl/1Becm8Dp8sW9Tuo39" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="transport">
+    <a class="transport-link" href="https://www.google.com/maps/dir/?api=1&origin=%E3%83%AA%E3%82%AB%E3%83%BC%E3%83%9E%E3%82%A6%E3%83%B3%E3%83%86%E3%83%B3777%E9%8A%80%E5%BA%A7&destination=KINGRAM+%E9%8A%80%E5%BA%A7&travelmode=walking" target="_blank">↳ 도보 이동 <span class="arrow">→</span></a>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d1-3">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">🛍️</span>킹그램</div>
+        <div class="stop-tag">쇼핑</div>
+      </div>
+      <div class="stop-info">빈티지</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://maps.app.goo.gl/Fo2vWvC3QC4KMG967" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="transport">
+    <a class="transport-link" href="https://www.google.com/maps/dir/?api=1&origin=KINGRAM+%E9%8A%80%E5%BA%A7&destination=%E7%89%B9%E5%88%A5%E9%A3%9F%E5%A0%82+%E6%97%A5%E6%9C%AC%E6%A9%8B&travelmode=walking" target="_blank">↳ 도보 이동 <span class="arrow">→</span></a>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d1-4">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">☕️</span>특별식당</div>
+        <div class="stop-tag">카페</div>
+      </div>
+      <div class="stop-info">特別食堂</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://maps.app.goo.gl/2LqECuUK4KzV9x2w7" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="transport">
+    <a class="transport-link" href="https://www.google.com/maps/dir/?api=1&origin=%E7%89%B9%E5%88%A5%E9%A3%9F%E5%A0%82+%E6%97%A5%E6%9C%AC%E6%A9%8B&destination=Age.3+%E9%8A%80%E5%BA%A7&travelmode=walking" target="_blank">↳ 도보 이동 <span class="arrow">→</span></a>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d1-5">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">🍮</span>아게 산 긴자</div>
+        <div class="stop-tag">간식</div>
+      </div>
+      <div class="stop-info">Age.3 Ginza</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://maps.app.goo.gl/icdxkZgTetYfwCVt8" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="transport">
+    <a class="transport-link" href="https://www.google.com/maps/dir/?api=1&origin=Age.3+%E9%8A%80%E5%BA%A7&destination=GINZA+SIX&travelmode=walking" target="_blank">↳ 도보 이동 <span class="arrow">→</span></a>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d1-6">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">🛍️</span>긴자6</div>
+        <div class="stop-tag">쇼핑</div>
+      </div>
+      <div class="stop-info">GINZA SIX · 백화점</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://maps.app.goo.gl/tAw34kmYfK22Afan6" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── DAY 2 ── -->
+<section class="day" id="day2">
+  <div class="day-header">
+    <div class="day-num-row">
+      <div class="day-num">Day 2</div>
+      <div class="day-date">5월 23일 (토)</div>
+    </div>
+    <h2 class="day-title">메이지 & 피자 & 와인</h2>
+    <p class="day-note">호텔 체크인 · 400 Pizza · Wine and Coffee A 18:30 예약</p>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d2-1">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">🍽️</span>사푸</div>
+        <div class="stop-tag">11:00 오픈</div>
+      </div>
+      <div class="stop-info">Sapu · 점심</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://maps.app.goo.gl/rh9AoxnvRoXkgE8e9" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="transport">
+    <a class="transport-link" href="https://www.google.com/maps/dir/?api=1&origin=Sapu+Tokyo&destination=%E6%98%8E%E6%B2%BB%E7%94%9F%E5%91%BD%E9%A4%A8&travelmode=walking" target="_blank">↳ 도보 이동 <span class="arrow">→</span></a>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d2-2">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">🏛️</span>메이지 생명관</div>
+        <div class="stop-tag">건축</div>
+      </div>
+      <div class="stop-info">明治生命館 · 견학</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://maps.app.goo.gl/yZngy2zqR46DNDsw8" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="transport">
+    <a class="transport-link" href="https://www.google.com/maps/dir/?api=1&origin=%E6%98%8E%E6%B2%BB%E7%94%9F%E5%91%BD%E9%A4%A8&destination=Riga+Royal+Hotel+Tokyo&travelmode=transit" target="_blank">↳ 전철 이동 <span class="arrow">→</span></a>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d2-3">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">🏨</span>리가 로얄 호텔</div>
+        <div class="stop-tag">체크인</div>
+      </div>
+      <div class="stop-info"><span class="badge check-in">CHECK-IN</span>Riga Royal Hotel</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://maps.app.goo.gl/f7KmNCrFkUK6bjjr9" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="transport">
+    <a class="transport-link" href="https://www.google.com/maps/dir/?api=1&origin=Riga+Royal+Hotel+Tokyo&destination=Kasiki+Tokyo&travelmode=walking" target="_blank">↳ 도보 이동 <span class="arrow">→</span></a>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d2-4">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">🍨</span>Kasiki</div>
+        <div class="stop-tag">디저트</div>
+      </div>
+      <div class="stop-info">디저트 · 간식</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://maps.app.goo.gl/J9PzRvT6hvzeEZvU8" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="transport">
+    <a class="transport-link" href="https://www.google.com/maps/dir/?api=1&origin=Kasiki+Tokyo&destination=Institut+francais+du+Japon+Tokyo&travelmode=walking" target="_blank">↳ 도보 이동 <span class="arrow">→</span></a>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d2-5">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">🏛️</span>프랑스 어학원</div>
+        <div class="stop-tag">방문</div>
+      </div>
+      <div class="stop-info">Institut français</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://maps.app.goo.gl/HksqATq89YDYJVrm8" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="transport">
+    <a class="transport-link" href="https://www.google.com/maps/dir/?api=1&origin=Institut+francais+du+Japon+Tokyo&destination=400+Pizza+Tokyo&travelmode=walking" target="_blank">↳ 도보 이동 <span class="arrow">→</span></a>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d2-6">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">🍽️</span>400 Pizza</div>
+        <div class="stop-tag">저녁</div>
+      </div>
+      <div class="stop-info"><span class="badge">예약완료</span>21일에 예약</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://maps.app.goo.gl/ytDPLURAoNnufd22A" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="transport">
+    <a class="transport-link" href="https://www.google.com/maps/dir/?api=1&origin=400+Pizza+Tokyo&destination=Wine+and+Coffee+A+Tokyo&travelmode=walking" target="_blank">↳ 도보 이동 <span class="arrow">→</span></a>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d2-7">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">🍷</span>Wine and Coffee A</div>
+        <div class="stop-tag">18:30</div>
+      </div>
+      <div class="stop-info"><span class="badge">예약완료</span>와인바</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://maps.app.goo.gl/72mymrqmwgKW1PPR7" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="transport">
+    <a class="transport-link" href="https://www.google.com/maps/dir/?api=1&origin=Wine+and+Coffee+A+Tokyo&destination=ORI+wine+bar+Tokyo&travelmode=walking" target="_blank">↳ 도보 이동 <span class="arrow">→</span></a>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d2-8">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">🍷</span>ORI</div>
+        <div class="stop-tag">와인바</div>
+      </div>
+      <div class="stop-info">와인바</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://maps.app.goo.gl/eo3ze7VpVB51U7GT7" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="transport">
+    <a class="transport-link" href="https://www.google.com/maps/dir/?api=1&origin=ORI+wine+bar+Tokyo&destination=I.N.U+wine+bar+Tokyo&travelmode=walking" target="_blank">↳ 도보 이동 <span class="arrow">→</span></a>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d2-9">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">🍷</span>I.N.U</div>
+        <div class="stop-tag">와인바</div>
+      </div>
+      <div class="stop-info">와인바</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://maps.app.goo.gl/cvCKB4N8M9xKtqAM7" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── DAY 3 ── -->
+<section class="day" id="day3">
+  <div class="day-header">
+    <div class="day-num-row">
+      <div class="day-num">Day 3</div>
+      <div class="day-date">5월 24일 (일)</div>
+    </div>
+    <h2 class="day-title">에도 & 요요기 & 니시아자부</h2>
+    <p class="day-note">👟 운동화 권장 · 산책 중심의 하루</p>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d3-1">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">🏛️</span>에도 도쿄건축정원</div>
+        <div class="stop-tag">10:00</div>
+      </div>
+      <div class="stop-info">江戸東京たてもの園</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://maps.app.goo.gl/Yf2itwd3iKnkgHLZ6" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="transport">
+    <a class="transport-link" href="https://www.google.com/maps/dir/?api=1&origin=%E6%B1%9F%E6%88%B8%E6%9D%B1%E4%BA%AC%E3%81%9F%E3%81%A6%E3%82%82%E3%81%AE%E5%9C%92&destination=Shichijo+Tokyo&travelmode=transit" target="_blank">↳ 전철 이동 <span class="arrow">→</span></a>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d3-2">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">🍽️</span>Shichijo</div>
+        <div class="stop-tag">11:30</div>
+      </div>
+      <div class="stop-info">七条 · 점심</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://maps.app.goo.gl/2169prVvZxRqQa7J7" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="transport">
+    <a class="transport-link" href="https://www.google.com/maps/dir/?api=1&origin=Shichijo+Tokyo&destination=Acid+Coffee+Tokyo&travelmode=walking" target="_blank">↳ 도보 이동 <span class="arrow">→</span></a>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d3-3">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">☕️</span>Acid Coffee</div>
+        <div class="stop-tag">카페</div>
+      </div>
+      <div class="stop-info">커피</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://maps.app.goo.gl/jiHymZFMJ1rfye9e8" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="transport">
+    <a class="transport-link" href="https://www.google.com/maps/dir/?api=1&origin=Acid+Coffee+Tokyo&destination=365+bakery+Tokyo&travelmode=walking" target="_blank">↳ 도보 이동 <span class="arrow">→</span></a>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d3-4">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">🥐</span>365</div>
+        <div class="stop-tag">베이커리</div>
+      </div>
+      <div class="stop-info">365日</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://maps.app.goo.gl/TPUF6J2nvz8dV5cJ9" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="transport">
+    <a class="transport-link" href="https://www.google.com/maps/dir/?api=1&origin=365+bakery+Tokyo&destination=Yoyogi+Park&travelmode=walking" target="_blank">↳ 도보 이동 · 하라주쿠 방향 <span class="arrow">→</span></a>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d3-5">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">🌳</span>요요기코엔</div>
+        <div class="stop-tag">공원</div>
+      </div>
+      <div class="stop-info">代々木公園 · 산책</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://maps.app.goo.gl/KV3F5VD3ptSuxF3y6" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="transport">
+    <a class="transport-link" href="https://www.google.com/maps/dir/?api=1&origin=Yoyogi+Park&destination=Tokyo+Metropolitan+Teien+Art+Museum&travelmode=transit" target="_blank">↳ 전철 이동 <span class="arrow">→</span></a>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d3-6">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">🏛️</span>Tokyo Metropolitan Teien</div>
+        <div class="stop-tag">미술관</div>
+      </div>
+      <div class="stop-info">정원 미술관</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://maps.app.goo.gl/GrBaBazV2o7xLkQ98" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="transport">
+    <a class="transport-link" href="https://www.google.com/maps/dir/?api=1&origin=Tokyo+Metropolitan+Teien+Art+Museum&destination=Arts+and+Science+Tokyo&travelmode=transit" target="_blank">↳ 전철 이동 <span class="arrow">→</span></a>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d3-7">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">🛍️</span>Art&Science</div>
+        <div class="stop-tag">쇼핑</div>
+      </div>
+      <div class="stop-info">셀렉트샵</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://maps.app.goo.gl/uDzrGUVkUEbduAYM6" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="transport">
+    <a class="transport-link" href="https://www.google.com/maps/dir/?api=1&origin=Arts+and+Science+Tokyo&destination=USHIGORO+S+NISHIAZABU&travelmode=walking" target="_blank">↳ 도보 이동 <span class="arrow">→</span></a>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d3-8">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">🥩</span>우시고로 에스 니시아자부</div>
+        <div class="stop-tag">17:00 오픈</div>
+      </div>
+      <div class="stop-info">USHIGORO S · 야키니쿠</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://maps.app.goo.gl/FD9CvNYYkKnnk17n8" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="transport">
+    <a class="transport-link" href="https://www.google.com/maps/dir/?api=1&origin=USHIGORO+S+NISHIAZABU&destination=Suzu+wine+bar+Nishiazabu&travelmode=walking" target="_blank">↳ 도보 이동 <span class="arrow">→</span></a>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d3-9">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">🍷</span>すず</div>
+        <div class="stop-tag">와인바</div>
+      </div>
+      <div class="stop-info">Suzu</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://maps.app.goo.gl/nPexbdfpJ38vpqkb9" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── DAY 4 ── -->
+<section class="day" id="day4">
+  <div class="day-header">
+    <div class="day-num-row">
+      <div class="day-num">Day 4</div>
+      <div class="day-date">5월 25일 (월)</div>
+    </div>
+    <h2 class="day-title">나카메구로 & 다이칸야마</h2>
+    <p class="day-note">SHIZEN 17:00 예약 완료</p>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d4-1">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">🍽️</span>고항야잇신</div>
+        <div class="stop-tag">11:30</div>
+      </div>
+      <div class="stop-info">ごはん屋一心 · 점심</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://maps.app.goo.gl/yhu5mfqvuGT2aA72A" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="transport">
+    <a class="transport-link" href="https://www.google.com/maps/dir/?api=1&origin=%E3%81%94%E3%81%AF%E3%82%93%E5%B1%8B%E4%B8%80%E5%BF%83+Tokyo&destination=ONIBUS+COFFEE+%E4%B8%AD%E7%9B%AE%E9%BB%92%E9%A7%85%E5%89%8D%E5%BA%97&travelmode=walking" target="_blank">↳ 도보 이동 <span class="arrow">→</span></a>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d4-2">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">☕️</span>ONIBUS COFFEE 中目黒駅前店</div>
+        <div class="stop-tag">카페</div>
+      </div>
+      <div class="stop-info">나카메구로</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://maps.app.goo.gl/AKoHa5Md8TFfGoxx6" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="transport">
+    <a class="transport-link" href="https://www.google.com/maps/dir/?api=1&origin=ONIBUS+COFFEE+%E4%B8%AD%E7%9B%AE%E9%BB%92%E9%A7%85%E5%89%8D%E5%BA%97&destination=TOUT+Y+EST+TOKYO&travelmode=walking" target="_blank">↳ 도보 이동 <span class="arrow">→</span></a>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d4-3">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">🛍️</span>TOUT Y EST TOKYO</div>
+        <div class="stop-tag">쇼핑</div>
+      </div>
+      <div class="stop-info">셀렉트샵</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://maps.app.goo.gl/HeRSFF3B7Xr1wBn48" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="transport">
+    <a class="transport-link" href="https://www.google.com/maps/dir/?api=1&origin=TOUT+Y+EST+TOKYO&destination=LEMAIRE+Tokyo&travelmode=walking" target="_blank">↳ 도보 이동 <span class="arrow">→</span></a>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d4-4">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">🛍️</span>LEMAIRE</div>
+        <div class="stop-tag">쇼핑</div>
+      </div>
+      <div class="stop-info">패션</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://maps.app.goo.gl/KYZNLUHPph6fVTvC7" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="transport">
+    <a class="transport-link" href="https://www.google.com/maps/dir/?api=1&origin=LEMAIRE+Tokyo&destination=SHIZEN+Tokyo+restaurant&travelmode=transit" target="_blank">↳ 전철 이동 <span class="arrow">→</span></a>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d4-5">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">🍽️</span>SHIZEN</div>
+        <div class="stop-tag">17:00</div>
+      </div>
+      <div class="stop-info"><span class="badge">예약완료</span>저녁</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://maps.app.goo.gl/8Ua6x5shRp4k8N1b9" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="transport">
+    <a class="transport-link" href="https://www.google.com/maps/dir/?api=1&origin=SHIZEN+Tokyo+restaurant&destination=Toritake+Tokyo&travelmode=walking" target="_blank">↳ 도보 이동 <span class="arrow">→</span></a>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d4-6">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">🍽️</span>토리타케</div>
+        <div class="stop-tag">야키토리</div>
+      </div>
+      <div class="stop-info">鳥竹</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://maps.app.goo.gl/MzMZ7uA37ZJpZAYk6" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── DAY 5 ── -->
+<section class="day" id="day5">
+  <div class="day-header">
+    <div class="day-num-row">
+      <div class="day-num">Day 5</div>
+      <div class="day-date">5월 26일 (화)</div>
+    </div>
+    <h2 class="day-title">귀국의 날</h2>
+    <p class="day-note">10:30 호텔 체크아웃 · NRT Terminal 2 · 17:40 출발</p>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d5-1">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">🏨</span>호텔 체크아웃</div>
+        <div class="stop-tag">10:30</div>
+      </div>
+      <div class="stop-info"><span class="badge check-out">CHECK-OUT</span>Riga Royal</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://maps.app.goo.gl/f7KmNCrFkUK6bjjr9" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="transport">
+    <a class="transport-link" href="https://www.google.com/maps/dir/?api=1&origin=Riga+Royal+Hotel+Tokyo&destination=%E9%BA%A6%E3%81%A8%E6%A9%84%E6%AC%96+Tokyo&travelmode=transit" target="_blank">↳ 전철 이동 <span class="arrow">→</span></a>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d5-2">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">🍽️</span>무기토올리브</div>
+        <div class="stop-tag">11:00</div>
+      </div>
+      <div class="stop-info">麦と橄欖 · 라멘</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://maps.app.goo.gl/daABHM6caQdizS4w8" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="transport">
+    <a class="transport-link" href="https://www.google.com/maps/dir/?api=1&origin=%E9%BA%A6%E3%81%A8%E6%A9%84%E6%AC%96+Tokyo&destination=%E9%8A%80%E5%BA%A7%E3%82%A6%E3%82%A8%E3%82%B9%E3%83%88+%E6%9C%AC%E5%BA%97&travelmode=walking" target="_blank">↳ 도보 이동 <span class="arrow">→</span></a>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d5-3">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">☕️</span>긴자 웨스트</div>
+        <div class="stop-tag">카페</div>
+      </div>
+      <div class="stop-info">銀座ウエスト · 마지막 커피</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://maps.app.goo.gl/q7Xm34zYsYaED5z18" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="transport">
+    <a class="transport-link" href="https://www.google.com/maps/dir/?api=1&origin=%E9%8A%80%E5%BA%A7%E3%82%A6%E3%82%A8%E3%82%B9%E3%83%88+%E6%9C%AC%E5%BA%97&destination=Narita+Airport+Terminal+2&travelmode=transit" target="_blank">↳ 공항으로 이동 <span class="arrow">→</span></a>
+  </div>
+
+  <div class="stop">
+    <input type="checkbox" class="check" data-id="d5-4">
+    <div class="stop-body">
+      <div class="stop-head">
+        <div class="stop-name"><span class="stop-icon">✈️</span>나리타 공항 Terminal 2</div>
+        <div class="stop-tag">17:40 출발</div>
+      </div>
+      <div class="stop-info">NRT T2 · さようなら, 東京</div>
+      <div class="stop-links">
+        <a class="lnk" href="https://www.google.com/maps/search/?api=1&query=Narita+Airport+Terminal+2" target="_blank">Map</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="f-title">Tokyo 2026</div>
+  <div class="f-meta">5월 22일 — 26일</div>
+  <div class="progress"><div class="progress-fill" id="pfill"></div></div>
+  <div class="progress-text" id="ptext">0 / 0 완료</div>
+</footer>
+
+<script>
+  function goTo(id) {
+    document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // Active nav highlight
+  const navBtns = document.querySelectorAll('.nav-btn');
+  const sections = document.querySelectorAll('.day');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const idx = ['day1','day2','day3','day4','day5'].indexOf(e.target.id);
+        navBtns.forEach((b,i) => b.classList.toggle('active', i === idx));
+      }
+    });
+  }, { threshold: 0.25 });
+  sections.forEach(s => obs.observe(s));
+
+  // Checkbox persistence
+  const STORAGE_KEY = 'tokyo2026-checks';
+  const checks = document.querySelectorAll('.check');
+  const total = checks.length;
+
+  function loadState() {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    } catch { return {}; }
+  }
+
+  function saveState(state) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch {}
+  }
+
+  function updateProgress() {
+    const done = document.querySelectorAll('.check:checked').length;
+    document.getElementById('pfill').style.width = (done/total*100) + '%';
+    document.getElementById('ptext').textContent = `${done} / ${total} 완료`;
+  }
+
+  function applyCheck(cb) {
+    cb.closest('.stop').classList.toggle('done', cb.checked);
+  }
+
+  const state = loadState();
+  checks.forEach(cb => {
+    const id = cb.dataset.id;
+    if (state[id]) cb.checked = true;
+    applyCheck(cb);
+
+    cb.addEventListener('change', () => {
+      const s = loadState();
+      if (cb.checked) s[id] = true;
+      else delete s[id];
+      saveState(s);
+      applyCheck(cb);
+      updateProgress();
+    });
+  });
+
+  updateProgress();
+</script>
+</body>
+</html>
